@@ -1,4 +1,16 @@
 #include <stdio.h>
+// write another program to use math to convert to lower
+char toLowerCase(char letter)
+{
+    if(letter >= 97 && letter <= 122) {
+            return letter;
+    } else if(letter >= 65 && letter <=90) {
+        return letter + 32;
+    } else {
+        return letter;
+    }
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -9,15 +21,12 @@ int main(int argc, char *argv[])
     }
 
     int i = 0;
-    for(i = 0; argv[1][i] != '\0'; i++) {
-        char letter = argv[1][i];
-        if(letter > 65 && letter < 90) {
-            letter = letter + 32;
-            printf("found %d", letter);
-        printf("on letter %d", letter);
-        }
+    char letter = 0;
+    //intialize letter with the , operator
+    for(i = 0; letter = argv[1][i], letter != '\0'; i++) {
+        char lowerCaseLetter = toLowerCase(letter);
 
-        switch(letter) {
+        switch(lowerCaseLetter) {
             case 'a':
             // case 'A':
                 printf("%d: 'A'\n", i);
@@ -51,12 +60,10 @@ int main(int argc, char *argv[])
                 }
                 break;
             default:
-                printf("%d: %c is not a vowel\n", i, letter);
+                printf("%d: %c is not a vowel\n", i, lowerCaseLetter);
         }
     }
 
     return 0;
 }
-
-            
 
