@@ -1,6 +1,11 @@
 *
 
-#except
+#haha this is cray
+#exceptions
 !*.gitignore
 !*.c
+!*Makefile*
+#allow the subdirs and the extra
+!/*ex*
+!/*ex*/*
 
