@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 
 
     printf("The first area is NOW %d, the 2nd %d.\n", areas[0], areas[1]);
+    printf("areas 10 - The first area is NOW %d, the 2nd %d.\n", areas[0], areas[10]);
 
     printf("The size of a char: %ld\n", sizeof(char));
     printf("The size of name (char[]): %ld\n", sizeof(name) / sizeof(char));
