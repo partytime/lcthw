@@ -40,6 +40,13 @@ int main(int argc, char *argv[])
         printf("%s is %d years old again.\n", cur_name[i], cur_age[i]);
     }
 
+    /*Add another for-loop at the end that prints out the addresses that these pointers are
+    using. You’ll need the %p format for printf.
+    */
+    for (i = 0; i < count; i++) {
+        printf("%s is at %p and %d is at %p.\n", cur_name[i], cur_name[i], cur_age[i], cur_age[i]);
+    }
+
     printf("---\n");
 
     // fourth way with pointers in a stupid complex way
@@ -47,6 +54,8 @@ int main(int argc, char *argv[])
             (cur_age - ages) < count; cur_name++, cur_age++) {
         printf("%s lived %d years so far.\n", *cur_name, *cur_age);
     }
+
+
 
     return 0;
 }
