@@ -4,8 +4,8 @@
 #include <errno.h>
 #include <string.h>
 
-#define MAX_DATA 512
-#define MAX_ROWS 100
+//#define MAX_DATA 512
+//#define MAX_ROWS 100
 
 struct Address {
     int id;
@@ -103,7 +103,7 @@ void Database_write(struct Connection *conn)
         die("cannot flush database", conn);
 }
 
-void Database_create(struct Connection *conn)
+void Database_create(struct Connection *conn, int MAX_DATA, int MAX_ROWS)
 {
     int i = 0;
 
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
     switch (action) {
         case 'c':
-            Database_create(conn);
+            Database_create(conn, 512, 50 );
             Database_write(conn);
             break;
 
