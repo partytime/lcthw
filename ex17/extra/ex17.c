@@ -4,14 +4,17 @@
 #include <errno.h>
 #include <string.h>
 
-//#define MAX_DATA 512
-//#define MAX_ROWS 100
+#define MAX_DATA 512
+#define MAX_ROWS 100
+
 
 struct Address {
     int id;
     int set;
     char name[MAX_DATA];
     char email[MAX_DATA];
+    // Add a new field
+    char city[MAX_DATA];
 };
 
 struct Database {
@@ -43,7 +46,7 @@ void die(const char *message, struct Connection *conn)
 
 void Address_print(struct Address *addr)
 {
-    printf("%d %s %s\n", addr->id, addr->name, addr->email);
+    printf("%d %s %s %s \n", addr->id, addr->name, addr->email, addr->city);
 }
 
 void Database_load(struct Connection *conn)
@@ -103,7 +106,7 @@ void Database_write(struct Connection *conn)
         die("cannot flush database", conn);
 }
 
-void Database_create(struct Connection *conn, int MAX_DATA, int MAX_ROWS)
+void Database_create(struct Connection *conn)
 {
     int i = 0;
 
@@ -115,7 +118,7 @@ void Database_create(struct Connection *conn, int MAX_DATA, int MAX_ROWS)
     }
 }
 
-void Database_set(struct Connection *conn, int id, const char *name, const char *email)
+void Database_set(struct Connection *conn, int id, const char *name, const char *email, const char *city)
 {
     struct Address *addr = &conn->db->rows[id];
     if (addr->set)
@@ -134,6 +137,10 @@ void Database_set(struct Connection *conn, int id, const char *name, const char 
     res = strncpy(addr->email, email, MAX_DATA);
     if (!res)
         die("email copy failed", conn);
+
+    res = strncpy(addr->city, city, MAX_DATA);
+    if (!res)
+        die("city copy failed", conn);
 }
 
 void Database_get(struct Connection *conn, int id)
@@ -167,22 +174,55 @@ void Database_list(struct Connection *conn)
     }
 }
 
+// need to write args funcs for this guy
+// write something to find in the db
+
+void Database_find_name(struct Connection *conn, char *name)
+{
+    int i = 0;
+    struct Database *db = conn->db;
+
+    for (i = 0; i < MAX_ROWS; i++) {
+        struct Address *current = &db->rows[i];
+
+        if (strcmp(current->name, name) == 0 ){
+            Address_print(current);
+        }
+    }
+}
+
+
+
+
 int main(int argc, char *argv[])
 {
-    if (argc < 3)
+    if (argc < 3){
         die("USAGE: ex17 <dbfile> <action> [action params]", NULL);
+    }
 
     char *filename = argv[1];
     char action = argv[2][0];
     struct Connection *conn = Database_open(filename, action);
+    char *findarg;
+    char *value;
     int id = 0;
 
-    if (argc > 3) id = atoi(argv[3]);
-    if (id >= MAX_ROWS) die("THERES NOT THAT MANY RECORDS", conn);
+    if (argc > 3 && argc != 5) {
+        id = atoi(argv[3]);
+    }
+
+    if (id >= MAX_ROWS) {
+        die("THERES NOT THAT MANY RECORDS", conn);
+    }
+
+    if (argc == 5) {
+        findarg = argv[3];
+        value = argv[4];
+    }
 
     switch (action) {
         case 'c':
-            Database_create(conn, 512, 50 );
+            Database_create(conn);
             Database_write(conn);
             break;
 
@@ -193,11 +233,21 @@ int main(int argc, char *argv[])
             Database_get(conn, id);
             break;
 
+        case 'f':
+            if (argc != 5){
+                die("Need a name to search for", conn);
+            }
+
+            if (strcmp(findarg, "name") == 0) {
+                Database_find_name(conn, value);
+            }
+            break;
+
         case 's':
-            if (argc != 6)
+            if (argc != 7)
                 die("Need it, name, email to set", conn);
 
-            Database_set(conn, id, argv[4], argv[5]);
+            Database_set(conn, id, argv[4], argv[5], argv[6]);
             Database_write(conn);
             break;
 
@@ -220,9 +270,6 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
-
-
 
 
 
