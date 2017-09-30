@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
     int errno = 0;
 
     // array of strings that is the location of files to read
-    char *files[4];
+    char **files;
+    char word[128];
     char tempf[512];
     int lineno = 0;
 
@@ -26,7 +27,11 @@ int main(int argc, char *argv[])
     // char badtoks[] = "\n\v\x19";
     char badtoks[] = "\n";
     while(fgets(tempf, 512, fp) != NULL) {
-        files[lineno] = strtok(tempf, badtoks);
+        //files[lineno] = strtok(tempf, badtoks);
+        files = (char**)realloc(files, (lineno + 1)*sizeof(*files));
+        word = strtok(tempf, badtoks);
+        files[lineno] = (char*)malloc(sizeof(word));
+        strcpy(files[lineno-1], word);
         printf("files[%d] is %s\n", lineno,  files[lineno]);
         lineno++;
     }

@@ -18,9 +18,9 @@ int searchfile(char *fname, char *str) {
 
     // read the fp file 512 bytes at a time, store in buffer 'temp'
     while(fgets(temp, 512, fp) != NULL) {
-        printf("searching lineno %d which contains: ", line_num);
-        puts(temp);
-        printf("\n");
+        //printf("searching lineno %d which contains: ", line_num);
+        //puts(temp);
+        //printf("\n");
         // search the 'temp' buffer for 'str'
         if((strstr(temp, str)) != NULL) {
             printf("found on line %d\n", line_num);
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     }
 
     // array of strings that is the location of files to read
-    char *files[4];
+    char* files[4];
     char tempf[512];
     int lineno = 0;
 
@@ -64,9 +64,13 @@ int main(int argc, char *argv[])
     char badtoks[] = "\n\v\x19";
     while(fgets(tempf, 512, fp) != NULL) {
         char *tempvar = strtok(tempf, badtoks);
-        files[lineno] = tempvar;
-        printf("TEMPVAR IS %s\n", tempvar);
-        printf("files[%d] is %s\n", lineno,  files[lineno]);
+        //files[lineno] = tempvar;
+        //strncpy(files[lineno], tempvar, 512);
+        //printf("sizeof tempvar is %d size of *tmpvar is %d, sizeof &tempvar is %d\n", sizeof(tempvar), sizeof(*tempvar), sizeof(&tempvar));
+        files[lineno] = malloc(512);
+        strncpy(files[lineno], tempvar, 512);
+        //printf("TEMPVAR IS %s\n", tempvar);
+        //printf("files[%d] is %s\n", lineno,  files[lineno]);
         lineno++;
     }
     int z = 0;
@@ -74,13 +78,13 @@ int main(int argc, char *argv[])
             printf("file %d is  %s\n", z, files[z]); 
     }
 
-    printf("size of files is %d\n", sizeof(files));
+    //printf("size of files is %d\n", sizeof(files));
     //int len = sizeof(files) / sizeof(files[0]);
     int len = sizeof(files);
     int i;
     for(i = 0; files[i] != '\0'; i++) {
         printf("searching in file %s\n", files[i]);
-        printf("i is %d\n", i);
+        //printf("i is %d\n", i);
         result = searchfile(files[i], argv[2]);
         if(result == -1) {
             perror("Error");
