@@ -38,6 +38,11 @@ int searchfile(char *fname, char *str) {
     return(0);
 }
 
+char getstring(char want, char stop)
+{
+    char buf[512];
+}
+
 int main(int argc, char *argv[])
 {
     int result;
