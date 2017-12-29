@@ -91,6 +91,12 @@ char *test_shift()
   return NULL;
 }
 
+char *test_copy()
+{
+  List_copy(list);
+  return NULL;
+}
+
 char *all_tests() {
   mu_suite_start();
 
@@ -100,6 +106,7 @@ char *all_tests() {
   mu_run_test(test_remove);
   mu_run_test(test_shift);
   mu_run_test(test_destroy);
+  mu_run_test(test_copy);
 
   return NULL;
 }
